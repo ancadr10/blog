@@ -21,9 +21,9 @@ import cors from 'cors';
 const app = express();
 const port = 3000;
 
+app.use(cors());  //to allow our client to communicate with this backend
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());  //to allow our client to communicate with this backend
 
 app.use('/api/categories', categoryRoutes);
 app.use('/api/tags', tagRoutes);
