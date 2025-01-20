@@ -1,0 +1,28 @@
+2025-01-15T15:40:09.716Z error: Cannot add or update a child row: a foreign key constraint fails (`blog`.`categories`, CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON UPDATE CASCADE) | Error
+    at Query.run (D:\blog\backend\node_modules\sequelize\src\dialects\mysql\query.js:46:25)
+    at D:\blog\backend\node_modules\sequelize\src\sequelize.js:650:28
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async MySQLQueryInterface.insert (D:\blog\backend\node_modules\sequelize\src\dialects\abstract\query-interface.js:795:21)
+    at async Category.save (D:\blog\backend\node_modules\sequelize\src\model.js:4154:35)
+2025-01-15T15:40:21.957Z error: Cannot add or update a child row: a foreign key constraint fails (`blog`.`categories`, CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON UPDATE CASCADE) | Error
+    at Query.run (D:\blog\backend\node_modules\sequelize\src\dialects\mysql\query.js:46:25)
+    at D:\blog\backend\node_modules\sequelize\src\sequelize.js:650:28
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async MySQLQueryInterface.insert (D:\blog\backend\node_modules\sequelize\src\dialects\abstract\query-interface.js:795:21)
+    at async Category.save (D:\blog\backend\node_modules\sequelize\src\model.js:4154:35)
+2025-01-15T17:36:46.081Z error: Tag is not associated to PostTag! | SequelizeEagerLoadingError: Tag is not associated to PostTag!
+    at Function._getIncludedAssociation (D:\blog\backend\node_modules\sequelize\src\model.js:742:13)
+    at Function._validateIncludedElement (D:\blog\backend\node_modules\sequelize\src\model.js:646:53)
+    at D:\blog\backend\node_modules\sequelize\src\model.js:542:37
+    at Array.map (<anonymous>)
+    at Function._validateIncludedElements (D:\blog\backend\node_modules\sequelize\src\model.js:537:39)
+    at Function.findAll (D:\blog\backend\node_modules\sequelize\src\model.js:1794:12)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-01-15T17:37:11.420Z error: Tag is not associated to PostTag! | SequelizeEagerLoadingError: Tag is not associated to PostTag!
+    at Function._getIncludedAssociation (D:\blog\backend\node_modules\sequelize\src\model.js:742:13)
+    at Function._validateIncludedElement (D:\blog\backend\node_modules\sequelize\src\model.js:646:53)
+    at D:\blog\backend\node_modules\sequelize\src\model.js:542:37
+    at Array.map (<anonymous>)
+    at Function._validateIncludedElements (D:\blog\backend\node_modules\sequelize\src\model.js:537:39)
+    at Function.findAll (D:\blog\backend\node_modules\sequelize\src\model.js:1794:12)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
