@@ -1,0 +1,6 @@
+<!-- <p>tag-detail works!</p> -->
+
+@if(tag) {
+    <h2>Tag: {{ tag.name }}</h2>
+    <app-posts-list [tagId]="tag.id"></app-posts-list>
+}

@@ -1,0 +1,16 @@
+<mat-toolbar color="primary flex justify-between">
+
+    <div class="flex items-center">
+        <button mat-icon-button (click)="toggleButtonClicked.emit()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>My App</span>
+    </div>
+
+    <div>    
+        <button mat-icon-button (click)="authService.logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </div>
+    
+</mat-toolbar>
