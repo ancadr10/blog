@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 
 dotenv.config({
-    path: './.env'
+    path: './src/.env'
 });
 
 import 'express-async-errors';
