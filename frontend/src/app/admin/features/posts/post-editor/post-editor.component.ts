@@ -52,7 +52,7 @@ export class PostEditorComponent {
     title: ['', Validators.required],
     id: [''],
     content: ['', Validators.required],
-    categoryId: [null, Validators.required],
+    categoryId: [null as number | null, Validators.required],
     tagIds: this.fb.array([]),
   });
 
@@ -78,7 +78,6 @@ export class PostEditorComponent {
             content: post.content,
             categoryId: post.categoryId as any,
           });
-
 
           this.form.updateValueAndValidity();
 
@@ -122,6 +121,7 @@ export class PostEditorComponent {
       tagIds: this.form.value.tagIds as any[]
     };
     this.postService.addPost(payload).subscribe(() => {
+      console.log('Navigating to /admin/posts');
       this.router.navigate(['/admin/posts'])
     });
   }
