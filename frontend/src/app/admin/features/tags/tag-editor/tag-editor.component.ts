@@ -40,7 +40,6 @@ export class TagEditorComponent {
   ngOnInit() {
 
     this.route.params.subscribe((data) => {
-      console.log('555555555555555555555555');
       const slug = data['slug'];
       if (slug) {
 

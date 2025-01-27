@@ -1,0 +1,6 @@
+<ng-template #toastTemplate>
+    <div class="toast-container">
+        <div>{{ message }}</div>
+        <mat-icon class="small-icon" (click)="_snackBar.dismiss()">close</mat-icon>
+    </div>
+</ng-template>

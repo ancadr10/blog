@@ -22,7 +22,6 @@ export class TagService {
 
 
   getTagBySlug(slug: string) {
-    console.log('xxx = ', this.baseUrl);
     return this.httpClient.get<ITag>(`${this.baseUrl}/getTagBySlug/${slug}`);
   }
 

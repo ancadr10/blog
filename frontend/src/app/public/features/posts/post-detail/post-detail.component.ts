@@ -9,6 +9,7 @@ import { IComment } from '../../../../core/interfaces/models/comment.model.inter
 import { CommentService } from '../../../../core/services/comment.service';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
+import { MessageNotificationService } from '../../../../core/services/message-notification.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -27,6 +28,7 @@ export class PostDetailComponent {
   tagService = inject(TagService);
   commentService = inject(CommentService);
   authService = inject(AuthService);
+  messageNotificationService = inject(MessageNotificationService);
 
   post?: IPost;
   postTags: IPostTag[] = [];
@@ -80,10 +82,11 @@ export class PostDetailComponent {
       next: () => {
         this.loadComments();
         this.form.reset();
+        this.messageNotificationService.setMessage('Category was updated sucecssfully', 'success');
       },
       error: (err) => {
         if (err && err.error && err.error.message) {
-          alert(err.error.message)
+          this.messageNotificationService.setMessage(err.error.message, 'error');
         }
         console.error(err);
       }

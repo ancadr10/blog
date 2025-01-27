@@ -11,6 +11,7 @@ import moment from 'moment';
 
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
 import { CategoryService } from '../../../../core/services/category.service';
+import { MessageNotificationService } from '../../../../core/services/message-notification.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ import { CategoryService } from '../../../../core/services/category.service';
 export class CategoriesListComponent implements OnInit {
 
   categoryService = inject(CategoryService);
+  messageNotificationService = inject(MessageNotificationService);
 
   displayedColumns: string[] = ['select', 'id', 'name', 'slug', 'createdAt', 'updatedAt', 'actions'];
   dataSource: MatTableDataSource<ICategory> = new MatTableDataSource<ICategory>([]);
@@ -92,9 +94,11 @@ export class CategoriesListComponent implements OnInit {
     Promise.all(promises)
       .then(() => {
         console.log('All categories deleted successfully');
+        this.messageNotificationService.setMessage('All categories deleted successfully', 'success');
         this.loadCategories();
       })
       .catch(error => {
+        this.messageNotificationService.setMessage('Failed to delete categories', 'error');
         console.error('Failed to delete categories', error);
       });
   }

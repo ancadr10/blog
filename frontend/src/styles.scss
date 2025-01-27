@@ -6,7 +6,7 @@
 //primary color
 $primary: #0069ff;
 
-:root{
+:root {
     --primary: #0069ff;
 }
 
@@ -21,5 +21,25 @@ p {
 .cta {
     @apply bg-[var(--primary)] text-white px-4 py-2 rounded-md hover:bg-[var(--primary)] transition-all duration-200;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+/* Global styles for snack bar */
+.toast-success {
+    --mdc-snackbar-container-color: #4caf50 !important;
+    --mdc-snackbar-label-color: white;
+}
+
+.toast-error {
+    --mdc-snackbar-container-color: #f44336 !important;
+    --mdc-snackbar-label-color: white;
+}
