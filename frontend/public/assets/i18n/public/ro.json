@@ -1,0 +1,19 @@
+{
+    "header": {
+        "nav": {
+            "home": "Acasa",
+            "admin": "Admin",
+            "about": "Despre",
+            "contact": "Contact"
+        }
+    },
+    "posts": {
+        "comments": {
+            "header": "Comentarii",
+            "post_comment_btn": "Posteaza Comentariul"
+        },
+        "category": {
+            "label": "Categorie"
+        }
+    }
+}

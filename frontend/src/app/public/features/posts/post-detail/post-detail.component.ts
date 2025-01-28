@@ -10,13 +10,15 @@ import { CommentService } from '../../../../core/services/comment.service';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
 import { MessageNotificationService } from '../../../../core/services/message-notification.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-post-detail',
   standalone: true,
   imports: [
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss'

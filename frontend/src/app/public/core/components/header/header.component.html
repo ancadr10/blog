@@ -6,15 +6,22 @@
         </a>
 
         <div class="space-x-10 text-gray-600">
-            <a routerLink="/home">Home</a>
-            <a routerLink="/admin">Admin</a>
-            <a routerLink="/about">About</a>
-            <a routerLink="/contact">Contact</a>
+            <a routerLink="/home">{{ 'header.nav.home' | translate }}</a>
+            <a routerLink="/admin">{{ 'header.nav.admin' | translate }}</a>
+            <a routerLink="/about">{{ 'header.nav.about' | translate }}</a>
+            <a routerLink="/contact">{{ 'header.nav.contact' | translate }}</a>
             @if (!authService.session) {
                 <a routerLink="/auth/login" class="cta">Login</a>
             } @else {
                 <button class="cta" (click)="authService.logout()">Logout</button>
             }
+
+            <mat-form-field appearance="outline" class="panel-override">
+                <mat-select [value]="'en'" (valueChange)="changeLang($event)">
+                    <mat-option [value]="'en'">{{ 'en' }}</mat-option>
+                    <mat-option [value]="'ro'">{{ 'ro' }}</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
 
     </div>

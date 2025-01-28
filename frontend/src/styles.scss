@@ -43,3 +43,10 @@ body {
     --mdc-snackbar-container-color: #f44336 !important;
     --mdc-snackbar-label-color: white;
 }
+
+
+mat-form-field.panel-override {
+    flex-direction: row;
+    --mat-form-field-container-height: 10px;
+    --mat-form-field-container-vertical-padding: 0px;
+}

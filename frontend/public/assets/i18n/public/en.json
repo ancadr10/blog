@@ -1,0 +1,19 @@
+{
+    "header": {
+        "nav": {
+            "home": "Home",
+            "admin": "Admin",
+            "about": "About",
+            "contact": "Contact"
+        }
+    },
+    "posts": {
+        "comments": {
+            "header": "Comments",
+            "post_comment_btn": "Post Comment"
+        },
+        "category": {
+            "label": "Category"
+        }
+    }
+}

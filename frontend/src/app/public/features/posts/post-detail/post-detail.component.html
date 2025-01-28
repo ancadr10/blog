@@ -5,7 +5,7 @@
     <div class="flex justify-between mb-20">
         <!-- display category and create date -->
         <p>
-            Category: <a [routerLink]="['/categories', post.category.slug]"><strong>{{ post.category.name }}</strong></a>
+            {{ 'posts.category.label' | translate }}: <a [routerLink]="['/categories', post.category.slug]"><strong>{{ post.category.name }}</strong></a>
         </p>
         <p>Created: <strong>{{ momentJs(post.createdAt).fromNow() }}</strong></p>
     </div>
@@ -28,7 +28,7 @@
     <!-- Commments Section -->
      <div class="mt-20">
         <h2 class="text-2xl mb-10">
-            Comments
+            {{ 'posts.comments.header' | translate }}
         </h2>
     
         @if (authService.session) {
@@ -44,7 +44,7 @@
             
                 <button type="submit"
                     class="bg-[var(--primary)] text-white px-4 py-2 mb-10  rounded-md hover:bg-blue-600 transition-colors duration-300 float-right">
-                    Post Comment
+                    {{ 'posts.comments.post_comment_btn' | translate }}
                 </button>
             </form>
         }
