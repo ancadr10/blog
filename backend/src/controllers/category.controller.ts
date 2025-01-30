@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addCategory, deleteCategory, getAllCategories, getCategoryById, getCategoryBySlug, updateCategory } from "../services/category.service";
+import { addCategory, deleteCategory, getAllCategories, getAllCategoriesPaginated, getCategoryById, getCategoryBySlug, updateCategory } from "../services/category.service";
 import { generateSlug } from "../shared/general.util";
 import { z } from "zod";
 import User from "../models/user";
@@ -17,6 +17,39 @@ export const getCategories = async (req: Request, res: Response): Promise<any> =
 
     return res.json(categories);
 }
+
+export const getCategoriesPaginated = async (req: Request, res: Response): Promise<any> => {
+
+    const user = (req as any).user as User;
+
+    const {
+        page = 0,
+        size = 5,
+        sortField = 'id',
+        sortOrder = 'DESC',
+        filters = {}
+    } = req.body;
+
+    const limit = parseInt(size, 10);
+    const offset = parseInt(page, 10) * limit;
+
+    const { partialElements, total } = await getAllCategoriesPaginated({
+        userId: user.get('id'),
+        limit,
+        offset,
+        sortField,
+        sortOrder,
+        filters
+    });
+
+    return res.json({
+        partialElements,
+        total,
+        page,
+        size: limit,
+    });
+}
+
 
 export const getCategoryBySlugController = async (req: Request, res: Response): Promise<any> => {
     const slug = req.params.slug;

@@ -1,12 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
-import { lastValueFrom } from 'rxjs';
+import { catchError, lastValueFrom, map, of, startWith, switchMap } from 'rxjs';
 import moment from 'moment';
 
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
@@ -22,12 +23,13 @@ import { MessageNotificationService } from '../../../../core/services/message-no
     MatCheckboxModule,
     MatButtonModule,
     MatIcon,
+    MatPaginatorModule,
     RouterModule
   ],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.scss'
 })
-export class CategoriesListComponent implements OnInit {
+export class CategoriesListComponent implements OnInit, AfterViewInit {
 
   categoryService = inject(CategoryService);
   messageNotificationService = inject(MessageNotificationService);
@@ -39,26 +41,65 @@ export class CategoriesListComponent implements OnInit {
 
   momentJs = moment;
 
+  totalResults = 0;
+  pageSize = 5;
+  defaultSortField = 'name';
 
-  ngOnInit(): void {
-    this.loadCategories();
+  selectedIds = new Set<number>;
+
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+
+
+  ngOnInit() { }
+
+  ngAfterViewInit() {
+    this.paginator?.page
+      .pipe(
+        startWith({ pageIndex: 0, pageSize: 5 }),
+        switchMap(({ pageIndex, pageSize }) =>
+          this.getCategories(pageIndex, pageSize)
+        ),
+        catchError(() => {
+          this.messageNotificationService.setMessage('Failed to load categories', 'error');
+          return of({});
+        })
+      )
+      .subscribe(response => {
+        this.dataSource.data = response.partialElements || [];
+        this.totalResults = response.total || 0;
+        this.reapplySelection();
+      });
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
+  private getCategories(pageIndex: number, pageSize: number) {
+    return this.categoryService.getCategoriesPaginated(this.buildSearchRequest(pageIndex, pageSize));
+  }
+
+  private buildSearchRequest(pageIndex: number, pageSize: number) {
+    return {
+      page: pageIndex,
+      size: pageSize,
+      sortField: this.defaultSortField,
+      sortOrder: "ASC",
+      filters: {}
+    };
+  }
+
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    return this.selection.selected.length === this.dataSource.data.length;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     if (this.isAllSelected()) {
+      this.dataSource.data.forEach(row => this.selectedIds.delete(row.id));
       this.selection.clear();
-      return;
+    } else {
+      this.dataSource.data.forEach(row => {
+        this.selectedIds.add(row.id);
+        this.selection.select(row);
+      });
     }
-
-    this.selection.select(...this.dataSource.data);
   }
 
   /** The label for the checkbox on the passed row */
@@ -69,22 +110,11 @@ export class CategoriesListComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
 
-  loadCategories() {
-    this.categoryService.getCategories().subscribe({
-      next: (data: ICategory[]) => {
-        this.dataSource.data = data;
-      },
-      error: (err) => {
-
-      }
-    })
-  };
-
   deleteSelectedCategories() {
     const selectedCategories = this.selection.selected;
-    const selectedCategoriIds = selectedCategories.map((category: ICategory) => category.id);
+    const idsToBeDeleted = selectedCategories.map((category: ICategory) => category.id);
 
-    let promises = selectedCategoriIds.map(categoryId => {
+    let promises = idsToBeDeleted.map(categoryId => {
       const ob$ = this.categoryService.deleteCategory(categoryId);
       //convert into promise
       return lastValueFrom(ob$!);
@@ -93,14 +123,44 @@ export class CategoriesListComponent implements OnInit {
     // Promise.all -> all or nothing -> if one of them fails then the others will not be processed either
     Promise.all(promises)
       .then(() => {
-        console.log('All categories deleted successfully');
         this.messageNotificationService.setMessage('All categories deleted successfully', 'success');
-        this.loadCategories();
+        if (this.paginator) {
+          this.getCategories(this.paginator.pageIndex, this.paginator.pageSize).subscribe((response) => {
+            this.dataSource.data = response.partialElements;
+            this.totalResults = response.total;
+
+            idsToBeDeleted.forEach(id => {
+              if (this.selectedIds.has(id)) {
+                this.selectedIds.delete(id);
+              }
+            });
+            this.reapplySelection();
+          });
+        }
       })
       .catch(error => {
         this.messageNotificationService.setMessage('Failed to delete categories', 'error');
         console.error('Failed to delete categories', error);
       });
+  }
+
+  toggleSelection(category: ICategory) {
+    if (this.selection.isSelected(category)) {
+      this.selectedIds.delete(category.id);
+      this.selection.deselect(category);
+    } else {
+      this.selectedIds.add(category.id);
+      this.selection.select(category);
+    }
+  }
+
+  reapplySelection() {
+    this.selection.clear();
+    this.dataSource.data.forEach(category => {
+      if (this.selectedIds.has(category.id)) {
+        this.selection.select(category);
+      }
+    });
   }
 
 }

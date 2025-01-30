@@ -64,6 +64,10 @@ export class PostsListComponent {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'}`;
   }
 
+  onRowClicked(row: IPost) {
+    console.log('clicked row ', row);
+  }
+
   loadPosts() {
     this.postService.getPosts({}).subscribe({
       next: (data: IPost[]) => {
@@ -72,7 +76,7 @@ export class PostsListComponent {
       error: (err) => {
         console.log(err);
       }
-    })
+    });
   };
 
   deleteSelectedPosts() {

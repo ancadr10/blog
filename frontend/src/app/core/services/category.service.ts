@@ -24,8 +24,12 @@ export class CategoryService {
     return this.httpClient.get<ICategory[]>(this.baseUrl);
   }
 
+  getCategoriesPaginated(searchRequest: any) {
+    return this.httpClient.post<any>(`${this.baseUrl}/categories-paginated`, searchRequest);
+  }
+
   addCategory({ name }: { name: string }) {
-    return this.httpClient.post<ICategory>(this.baseUrl, {name});
+    return this.httpClient.post<ICategory>(this.baseUrl, { name });
   }
 
   updateCategory({ id, name }: { id: number, name: string }) {

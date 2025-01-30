@@ -18,6 +18,42 @@ export async function getAllCategories(filters?: { userId?: number }) {
     return categories;
 }
 
+export async function getAllCategoriesPaginated(filters?: {
+    userId?: number,
+    limit?: number,
+    offset?: number,
+    sortField?: string,
+    sortOrder?: 'ASC' | 'DESC',
+    filters?: Record<string, any>
+}) {
+
+    const where: any = {};
+
+    if (filters && filters.userId) {
+        where.userId = filters.userId;
+    }
+
+    //we add dynamic filters if any
+    if (filters?.filters) {
+        Object.assign(filters, filters.filters);
+    }
+
+    const { limit, offset, sortField = 'id', sortOrder = 'DESC' } = filters || {};
+
+    const result = await Category.findAndCountAll({
+        where,
+        order: [[sortField, sortOrder]],
+        limit,
+        offset
+    });
+
+    return {
+        partialElements: result.rows,
+        total: result.count
+    };
+}
+
+
 export async function addCategory(name: string, slug: string, userId: number) {
     const category = new Category();
     category.name = name;

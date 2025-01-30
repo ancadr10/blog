@@ -4,13 +4,15 @@ import {
     addCategoriesController, 
     updateCategoryController,
     deleteCategoryController,
-    getCategoryBySlugController
+    getCategoryBySlugController,
+    getCategoriesPaginated
 } from "../controllers/category.controller";
 import { authenticateJWT, authenticateJWTOptional } from "../shared/auth.util";
 
 const router: Router = express.Router();
 
 router.get('/', authenticateJWTOptional, getCategories);
+router.post('/categories-paginated', authenticateJWTOptional, getCategoriesPaginated);
 router.post('/', authenticateJWT,  addCategoriesController);
 router.put('/', authenticateJWT,  updateCategoryController);
 router.delete('/', authenticateJWT,  deleteCategoryController);

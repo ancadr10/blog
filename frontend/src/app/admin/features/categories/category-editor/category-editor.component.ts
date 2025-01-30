@@ -83,6 +83,7 @@ export class CategoryEditorComponent {
 
     this.categoryService.updateCategory(payload).subscribe(() => {
       alert('Category updated');
+      this.router.navigate(['/admin/categories']);
     });
   }
 
