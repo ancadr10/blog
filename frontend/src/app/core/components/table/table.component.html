@@ -1,0 +1,82 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-override">
+
+    @for (col of tableColumns; track $index) {
+        <ng-container [matColumnDef]="col.columnDef">
+            <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox color="primary" *ngIf="col.headerCheckbox"
+                    (change)="onHeaderCheckboxClick($event, col.columnDef)"
+                    [checked]="selection.hasValue() && isAllSelected()">
+                </mat-checkbox>
+                {{ col.header }}
+            </th>
+            <th *ngIf="showEditActionButton && col.actions?.length">
+                {{ col.header }}
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+
+                <ng-container *ngIf="col.colType === 'checkbox'" [ngTemplateOutlet]="checkbox" [ngTemplateOutletContext]="{ $implicit: element, col: col }">
+                </ng-container>
+
+                <ng-container *ngIf="col.colType === 'text'" [ngTemplateOutlet]="noTemplate" [ngTemplateOutletContext]="{ $implicit: element, col: col }">
+                </ng-container>
+
+                <ng-container *ngIf="col.colType === 'date'" [ngTemplateOutlet]="dateTemplate" [ngTemplateOutletContext]="{ $implicit: element, col: col }">
+                </ng-container>
+
+                <ng-container *ngIf="col.colType === 'actions'" [ngTemplateOutlet]="actionsTemplate" [ngTemplateOutletContext]="{ $implicit: element, col: col }">
+                </ng-container>
+
+            </td>
+        </ng-container>
+    }
+
+    <ng-template #checkbox let-element let-col="col">
+        <mat-checkbox color="primary"
+            (click)="$event.stopPropagation()"
+            (change)="onBodyCheckboxClick($event, element)"
+            [checked]="selection.isSelected(element)">
+        </mat-checkbox>
+    </ng-template>
+    
+    <ng-template #noTemplate let-element let-col="col">
+        {{ element[col.columnDef] }}
+    </ng-template>
+    
+    <ng-template #dateTemplate let-element let-col="col">
+        {{ momentJs(element[col.createdAt]).format('YYYY-MM-DD') }}
+    </ng-template>
+
+    <ng-template #actionsTemplate let-element let-col="col">
+        <div>
+            @for (action of col.actions; track $index) {
+                @if (action === 'edit') {
+                    <button mat-icon-button (click)="onEditIconButtonClick(element)">
+                        <mat-icon>{{ action }}</mat-icon>
+                    </button>
+                }
+                @if (action === 'info') {
+                    <button mat-icon-button (click)="onInfoIconButtonClick(element)">
+                        <mat-icon>{{ action }}</mat-icon>
+                    </button>
+                }
+            }
+        </div>
+    </ng-template>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+    </tr>
+
+</table>
+
+<mat-paginator
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [length]="totalRecords"
+    (page)="onPageChange($event)">
+</mat-paginator>
+
+<!-- {{pageIndex}} {{pageSize}}  {{totalRecords}} -->
+
+

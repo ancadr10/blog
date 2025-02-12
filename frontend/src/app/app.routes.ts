@@ -14,5 +14,9 @@ export const routes: Routes = [
     {
         path: 'auth',
         loadChildren: () => import('./public/features/auth/auth.module').then(m => m.AuthModule)
+    },
+    {
+        path: 'about',
+        loadChildren: () => import('./about/about.module').then(m => m.AboutModule)
     }
 ];

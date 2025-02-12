@@ -1,3 +1,6 @@
+@import './assets/scss/helpers';
+@import './assets/scss/variables';
+
 /* You can add global styles to this file, and also import other style files */
 // @tailwind base;
 @tailwind components;
@@ -49,4 +52,67 @@ mat-form-field.panel-override {
     flex-direction: row;
     --mat-form-field-container-height: 10px;
     --mat-form-field-container-vertical-padding: 0px;
+}
+
+/* Toggle layout directive */
+#toggle-layout[data-state="increase"] mat-icon,
+#toggle-layout[data-state="reduce"] mat-icon {
+    color: $primary;
+    font-size: 1.5rem;
+}
+
+.file-uploader {
+
+    button {
+        background: map-get($uploader-colors, primary);
+        border: none;
+        box-shadow: none;
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        padding: 0 20px;
+        text-transform: uppercase;
+
+        &.primary-button,
+        &.secondary-button {
+            min-width: 150px;
+        }
+
+        &.secondary-button {
+            background: map-get($uploader-colors, primary-dark);
+        }
+
+        &:hover,
+        &:focus {
+            outline: none;
+        }
+
+        &:not(.mat-focus-indicator) {
+            height: 50px;
+
+            &:hover,
+            &:focus {
+                background: map-get($uploader-colors, primary-light);
+                color: map-get($uploader-colors, default-text);
+                outline: none;
+            }
+
+            &:disabled {
+                background: map-get($uploader-colors, disabled-bg);
+                color: map-get($uploader-colors, disabled-text);
+            }
+        }
+
+        .button-icon {
+            font-size: 2rem;
+            margin-left: 10px;
+        }
+    }
+
+    mat-expansion-panel-header.mat-expansion-panel-header{
+        padding: 0px !important;
+        
+        span.mat-content.mat-content-hide-toggle {
+            margin-right: 0px;
+        }
+    }
 }

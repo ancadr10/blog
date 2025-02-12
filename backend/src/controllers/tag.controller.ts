@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addTag, deleteTag, getAllTags, getTagById, getTagBySlug } from "../services/tag.service";
+import { addTag, deleteTag, getAllTags, getAllTagsPaginated, getTagById, getTagBySlug } from "../services/tag.service";
 import { z } from "zod";
 import { generateSlug } from "../shared/general.util";
 import { getPostById } from "../services/post.service";
@@ -12,11 +12,42 @@ export const getTagsController = async (req: Request, res: Response): Promise<an
     const tags = await getAllTags({
         userId: user.get('id')
     });
-    
+
     return res.json(tags);
 };
 
-/// user id is hardcoded ????
+export const getTagsPaginated = async (req: Request, res: Response): Promise<any> => {
+    const user = (req as any).user as User;
+
+    const {
+        page = 0,
+        size = 5,
+        sortField = 'id',
+        sortOrder = 'DESC',
+        filters = {}
+    } = req.body;
+
+    const limit = parseInt(size, 10);
+    const offset = parseInt(page, 10) * limit;
+
+    const { partialElements, total } = await getAllTagsPaginated({
+        userId: user.get('id'),
+        limit,
+        offset,
+        sortField,
+        sortOrder,
+        filters
+    });
+
+    return res.json({
+        partialElements,
+        total,
+        page,
+        size: limit,
+    });
+
+}
+
 export const addTagController = async (req: Request, res: Response): Promise<any> => {
 
     const schema = z.object({

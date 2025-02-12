@@ -29,6 +29,10 @@ export class TagService {
     return this.httpClient.get<ITag[]>(this.baseUrl);
   }
 
+  getTagsPaginated(searchRequest: any) {
+    return this.httpClient.post<any>(`${this.baseUrl}/tags-paginated`, searchRequest);
+  }
+
   addTag({ name }: { name?: string }) {
     return this.httpClient.post<ITag>(this.baseUrl, { name });
   }

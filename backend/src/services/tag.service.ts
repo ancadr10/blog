@@ -16,6 +16,41 @@ export const getAllTags = (filters?: { userId?: number }) => {
     });
 }
 
+export async function getAllTagsPaginated(filters?: {
+    userId?: number,
+    limit?: number,
+    offset?: number,
+    sortField?: string,
+    sortOrder?: 'ASC' | 'DESC',
+    filters?: Record<string, any>
+}) {
+    const where: any = {};
+
+    if (filters && filters.userId) {
+        where.userId = filters.userId;
+    }
+
+    //we add dynamic filters if any
+    if (filters?.filters) {
+        Object.assign(filters, filters.filters);
+    }
+
+    const { limit, offset, sortField = 'id', sortOrder = 'DESC' } = filters || {};
+
+    const result = await Tag.findAndCountAll({
+        where,
+        order: [[sortField, sortOrder]],
+        limit,
+        offset
+    });
+
+    return {
+        partialElements: result.rows,
+        total: result.count
+    };
+
+}
+
 export const addTag = (name: string, slug: string, userId: number) => {
     const tag = new Tag();
     tag.name = name;

@@ -1,0 +1,87 @@
+
+
+<div style="width: 80%; margin: auto;">
+    <div class="file-uploader">
+        <div class="upload-label">
+            Drag and drop / Browse file(s)
+        </div>
+        <div class="files-container">
+            <mat-expansion-panel *ngFor="let file of selectedFiles; index as i"
+                class="selected-file" hideToggle disabled
+                expanded="{{ !!file.uploadResult }}">
+    
+                <mat-expansion-panel-header>
+                    <div class="selected-file__header">
+                        <div class="selected-file__name">
+                            {{ file.file.name }}
+                        </div>
+    
+                        <div class="selected-file__actions">
+                            <button matRipple class="selected-file__upload primary-button"
+                                matTooltip="Upload"
+                                matTooltipPosition="left"
+                                aria-label="Upload File"
+                                (click)="uploadFile(i)"
+                                [disabled]="file.uploadInProgress || file.uploadResult === 'success'">
+                                <span *ngIf="file.uploadResult === 'success'" aria-hidden="true" class="material-icons">
+                                    check
+                                </span>
+                                <span *ngIf="file.uploadResult !== 'success'" aria-hidden="true" class="material-icons">
+                                    file_upload
+                                </span>
+                            </button>
+                            <button matRipple class="secondary-button"
+                                matTooltip="Cancel"
+                                matTooltipPosition="left"
+                                aria-label="Cancel File"
+                                (click)="onCancelFile(i)">
+                                <span aria-hidden="true" class="material-icons">clear</span>
+                            </button>
+                        </div>
+                    </div>
+                    <mat-progress-bar *ngIf="file.uploadInProgress" mode="indeterminate"></mat-progress-bar>
+                </mat-expansion-panel-header>
+    
+                <div class="selected-file__upload_result" *ngIf="file.uploadResult && file.uploadResult === 'success'">
+                    The file was uploaded successfully.
+                </div>
+                <div class="selected-file__upload_error" *ngIf="file.uploadResult && file.uploadResult !== 'success'">
+                    {{ file.uploadResult }}
+                </div>
+    
+              </mat-expansion-panel>
+        </div>
+    
+        <div class="file-uploader__options">
+            <form class="file-upload__native-selection" [formGroup]="form">
+                <input type="file" #fileSelector formControlName="fileSelection"
+                    [accept]="config.MIME_types_accepted"
+                    multiple="{{ true }}">
+            </form>
+            <button matRipple class="file-upload__browse primary-button"
+                (click)="openFileSelector()">
+                Browse Files
+            </button>
+    
+            <ng-container>
+    
+                <button matRipple class="all_file__upload primary-button"
+                    matTooltip="Upload All"
+                    matTooltipPosition="above"
+                    aria-label="Upload All Files"
+                    (click)="uploadAll()"
+                    [disabled]="!allFilesUploaded()">
+                    <span aria-hidden="true" class="material-icons">file_upload</span>
+                </button>
+                <button matRipple class="all_file__cancel secondary-button"
+                    matTooltip="Cancel All"
+                    matTooltipPosition="above"
+                    aria-label="Cancel All Files"
+                    (click)="cancelAll()">
+                    <span aria-hidden="true" class="material-icons">clear</span>
+                </button>
+            </ng-container>
+    
+        </div>
+    </div>
+</div>
